@@ -1,16 +1,18 @@
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-//const num = 0;
 
-let newPrompt = "Tell a story. However, while telling the story, stop at a point and ask the user a question with options A, B, C that will change the flow of the story depending on the answer.";
-let messg = "";
+const createStory = async (option, start, Continue, finish) => {
 
-const createStory = async () => {
 
-    let id=0;
+    let firstPrompt = "Tell a story. However, while telling the story, stop at a point and ask the user a question with options A, B, C that will change the flow of the story depending on the answer.";
+    let historyAssistant = "";
+    
+    let book = [[], []];
 
-    while(id<3){
+    let num=0;
+
+    while(num<3){
 
         const res = await fetch('https://api.edenai.run/v2/text/chat',{
             method: 'POST',
@@ -26,14 +28,14 @@ const createStory = async () => {
                 temperature: 0.7,
                 max_tokens: 500,
                 providers: 'openai',
-                text: newPrompt,
+                text: firstPrompt,
                 chatbot_global_action: 'You are a story teller.',
                 previous_history: [
                 {
                     role: 'user',
-                    message: newPrompt
+                    message: firstPrompt
                 },
-                {role: 'assistant', message: messg}
+                {role: 'assistant', message: historyAssistant}
                 ]
             })
 
@@ -41,19 +43,20 @@ const createStory = async () => {
 
         const generatedText = await res.json();
         
-        console.log(generatedText.openai.generated_text);
-
-        id++;
-
-        if(id!==0){
-            newPrompt="User's answer: Option A. Continue the story based on the answer and keep asking questions.";
-            messg = generatedText.openai.generated_text;
-        }
-
+        book[0].push(generatedText.openai.generated_text.split('A)')[0]);
         
+        book[1].push("A)"+generatedText.openai.generated_text.split('A)')[1]);
+
+        num++;
+
+        if(num!==0){
+            let newPrompt=`User's answer: Option ${option}. Continue the story based on the answer and keep asking questions.`;
+            firstPrompt = newPrompt;
+            historyAssistant = generatedText.openai.generated_text;
+        }
     }
 
-    
+    return book;
 
 };
 

@@ -10,8 +10,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 require('dotenv').config();
 
-app.listen(3000, () => {
-    console.log("Server is Listening on port 3000");
+app.listen(8000, () => {
+    console.log("Server is Listening on port 8000");
 });
 
 app.get('/', (req, res) => {
