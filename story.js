@@ -20,7 +20,11 @@ app.get('/', (req, res) => {
 
 app.post('/story', (req, res) => {
 
-    createStory().then((data) => {
+    let option = req.body.option;
+    let prompt = req.body.prompt;
+    let history = req.body.history;
+
+    createStory(option, prompt, history).then((data) => {
         res.status(200).send(data);
     }).catch((err)=>{
         res.status(500).send('Something went wrong!');
