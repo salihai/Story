@@ -2,12 +2,12 @@ const fetch = require('node-fetch');
 require('dotenv').config();
 
 
-const createStory = async (option, prompt, history) => {
+const createStory = async (option, words, prompt, history) => {
 
     let firstPrompt;
 
     if(prompt==='1'){
-        firstPrompt = "Tell a story. However, while telling the story, stop at a point and ask the user a question with options A, B, C that will change the flow of the story depending on the answer.";
+        firstPrompt = `Tell a story using these 10 words: ${words}. However, while telling the story, stop at a point and ask the user a question with options A, B, C that will change the flow of the story depending on the answer.`;
     }else if(prompt==='2'){
         firstPrompt = `User's answer: Option ${option}. Continue the story based on the answer and keep asking questions and give options A, B, C with answers.`;
     }else if(prompt==='3'){

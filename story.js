@@ -23,8 +23,9 @@ app.post('/story', (req, res) => {
     let option = req.body.option;
     let prompt = req.body.prompt;
     let history = req.body.history;
+    let words = req.body.words;
 
-    createStory(option, prompt, history).then((data) => {
+    createStory(option, words, prompt, history).then((data) => {
         res.status(200).send(data);
     }).catch((err)=>{
         res.status(500).send('Something went wrong!');
